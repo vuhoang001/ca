@@ -135,13 +135,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
 
-      - name: Wait for SQL Server
-        run: |
-          for i in {1..20}; do
-            /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${{ secrets.DB_PASSWORD }}" -Q "SELECT 1" -C && break
-            echo "Waiting for SQL Server..."
-            sleep 5
-          done
 
       - name: Run database migrations
         run: |
