@@ -29,7 +29,8 @@ public sealed class CreateRoleCommandHandler(
 {
     public async Task<RoleResponse> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
-        if (await roleRepository.ExistsByNormalizedNameAsync(request.Name.Trim().ToUpperInvariant(), request.TenantId, cancellationToken))
+        if (await roleRepository.ExistsByNormalizedNameAsync(request.Name.Trim().ToUpperInvariant(), request.TenantId,
+                                                             cancellationToken))
         {
             throw new ConflictException($"Role '{request.Name}' already exists.");
         }
@@ -37,7 +38,8 @@ public sealed class CreateRoleCommandHandler(
         var role = new Role(request.TenantId, request.Name, request.Description, request.IsSystem);
         roleRepository.Add(role);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        await auditService.WriteAsync("role.created", nameof(Role), role.Id.ToString(), new { role.Name }, "Success", cancellationToken);
+        await auditService.WriteAsync("role.created", nameof(Role), role.Id.ToString(), new { role.Name }, "Success",
+                                      cancellationToken);
 
         return new RoleResponse(role.Id, role.Name, role.Description, role.IsActive, role.IsSystem, role.TenantId);
     }

@@ -17,7 +17,13 @@ public sealed record UserProfileResponse(
     IReadOnlyCollection<string> Roles,
     IReadOnlyCollection<string> Permissions);
 
-public sealed record RoleResponse(Guid Id, string Name, string? Description, bool IsActive, bool IsSystem, Guid? TenantId);
+public sealed record RoleResponse(
+    Guid Id,
+    string Name,
+    string? Description,
+    bool IsActive,
+    bool IsSystem,
+    Guid? TenantId);
 
 public sealed record PermissionResponse(
     Guid Id,

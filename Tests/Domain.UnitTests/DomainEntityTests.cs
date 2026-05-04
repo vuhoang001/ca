@@ -34,4 +34,3 @@ public class DomainEntityTests
         Assert.True(result);
     }
 }
-

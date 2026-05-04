@@ -21,7 +21,8 @@ public sealed class PermissionRepository(AppDbContext dbContext) : IPermissionRe
         return dbContext.Permissions.AnyAsync(x => x.Code == code, cancellationToken);
     }
 
-    public Task<List<Permission>> GetByIdsAsync(IReadOnlyCollection<Guid> permissionIds, CancellationToken cancellationToken = default)
+    public Task<List<Permission>> GetByIdsAsync(IReadOnlyCollection<Guid> permissionIds,
+        CancellationToken cancellationToken = default)
     {
         return dbContext.Permissions.Where(x => permissionIds.Contains(x.Id)).ToListAsync(cancellationToken);
     }

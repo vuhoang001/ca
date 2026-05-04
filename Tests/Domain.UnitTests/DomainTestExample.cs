@@ -17,5 +17,3 @@ public class DomainTestExample
         Assert.Equal(expectedValue, result);
     }
 }
-
-

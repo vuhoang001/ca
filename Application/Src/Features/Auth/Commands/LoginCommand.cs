@@ -35,12 +35,14 @@ public sealed class LoginCommandHandler(
 {
     public async Task<TokenResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByNormalizedEmailAsync(request.Email.Trim().ToUpperInvariant(), true, cancellationToken)
-                   ?? throw new UnauthorizedException("Invalid credentials.");
+        var user = await userRepository.GetByNormalizedEmailAsync(request.Email.Trim().ToUpperInvariant(), true,
+                                                                  cancellationToken)
+            ?? throw new UnauthorizedException("Invalid credentials.");
 
         if (!passwordService.VerifyPassword(user, user.PasswordHash, request.Password))
         {
-            await auditService.WriteAsync("auth.login", nameof(User), user.Id.ToString(), new { request.Email }, "Failed", cancellationToken);
+            await auditService.WriteAsync("auth.login", nameof(User), user.Id.ToString(), new { request.Email },
+                                          "Failed", cancellationToken);
             throw new UnauthorizedException("Invalid credentials.");
         }
 
@@ -48,12 +50,13 @@ public sealed class LoginCommandHandler(
         if (!string.IsNullOrWhiteSpace(request.ClientId))
         {
             clientApp = await clientAppRepository.GetByClientIdAsync(request.ClientId!, cancellationToken)
-                        ?? throw new UnauthorizedException("Unknown client application.");
+                ?? throw new UnauthorizedException("Unknown client application.");
         }
 
         var roles = await userRepository.GetRoleNamesAsync(user.Id, cancellationToken);
         var permissions = await userRepository.GetPermissionCodesAsync(user.Id, cancellationToken);
-        var tokenResult = tokenService.GenerateTokens(user.Id, user.Email, user.UserName, user.TenantId, roles, permissions, clientApp?.ClientId);
+        var tokenResult = tokenService.GenerateTokens(user.Id, user.Email, user.UserName, user.TenantId, roles,
+                                                      permissions, clientApp?.ClientId);
 
         var refreshToken = new RefreshToken(
             user.Id,
@@ -69,7 +72,8 @@ public sealed class LoginCommandHandler(
         user.MarkLogin(dateTimeProvider.UtcNow);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        await auditService.WriteAsync("auth.login", nameof(User), user.Id.ToString(), new { user.Email, clientApp = request.ClientId }, "Success", cancellationToken);
+        await auditService.WriteAsync("auth.login", nameof(User), user.Id.ToString(),
+                                      new { user.Email, clientApp = request.ClientId }, "Success", cancellationToken);
 
         return new TokenResponse(
             tokenResult.AccessToken,

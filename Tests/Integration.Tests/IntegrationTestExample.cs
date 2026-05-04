@@ -17,5 +17,3 @@ public class IntegrationTestExample
         Assert.Equal(expectedValue, result);
     }
 }
-
-

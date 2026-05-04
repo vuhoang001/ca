@@ -1,0 +1,62 @@
+version: "3.9"
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mssql-data:
+
+services:
+  # ── MSSQL ─────────────────────────────────────────────────────────────
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: myapp-mssql
+    restart: unless-stopped
+    networks: [ app-network ]
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "Dev@Passw0rd!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: [
+        "CMD", "/opt/mssql-tools18/bin/sqlcmd",
+        "-S", "localhost", "-U", "sa", "-P", "Dev@Passw0rd!",
+        "-Q", "SELECT 1", "-C"
+      ]
+      interval: 15s
+      timeout: 10s
+      retries: 8
+      start_period: 30s
+
+  # ── Application API ────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+    container_name: myapp-api
+    restart: unless-stopped
+    networks: [ app-network ]
+    ports:
+      - "8080:8080"
+    depends_on:
+      mssql:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: >-
+        Server=mssql,1433;Database=MyAppDb;User Id=sa;
+        Password=Dev@Passw0rd!;TrustServerCertificate=True;
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s

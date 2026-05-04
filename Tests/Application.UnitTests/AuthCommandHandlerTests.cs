@@ -17,6 +17,10 @@ public class AuthCommandHandlerTests
         // Act
         var result = true;
 
+
+
+
+
         // Assert
         Assert.Equal(expectedResult, result);
     }
@@ -37,4 +41,3 @@ public class AuthCommandHandlerTests
         Assert.Equal(expectedResult, result);
     }
 }
-

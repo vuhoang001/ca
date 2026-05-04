@@ -20,10 +20,11 @@ public sealed class CheckUserPermissionQueryValidator : AbstractValidator<CheckU
 public sealed class CheckUserPermissionQueryHandler(IUserRepository userRepository)
     : IRequestHandler<CheckUserPermissionQuery, PermissionCheckResponse>
 {
-    public async Task<PermissionCheckResponse> Handle(CheckUserPermissionQuery request, CancellationToken cancellationToken)
+    public async Task<PermissionCheckResponse> Handle(CheckUserPermissionQuery request,
+        CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken: cancellationToken)
-                   ?? throw new NotFoundException("User not found.");
+            ?? throw new NotFoundException("User not found.");
 
         var permissions = await userRepository.GetPermissionCodesAsync(user.Id, cancellationToken);
         var granted = permissions.Contains(request.PermissionCode.Trim(), StringComparer.OrdinalIgnoreCase);

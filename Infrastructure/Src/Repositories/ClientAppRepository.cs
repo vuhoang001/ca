@@ -10,6 +10,7 @@ public sealed class ClientAppRepository(AppDbContext dbContext) : IClientAppRepo
     public Task<ClientApp?> GetByClientIdAsync(string clientId, CancellationToken cancellationToken = default)
     {
         var normalizedClientId = clientId.Trim().ToLowerInvariant();
-        return dbContext.ClientApps.FirstOrDefaultAsync(x => x.ClientId == normalizedClientId && x.IsActive, cancellationToken);
+        return dbContext.ClientApps.FirstOrDefaultAsync(x => x.ClientId == normalizedClientId && x.IsActive,
+                                                        cancellationToken);
     }
 }

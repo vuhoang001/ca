@@ -14,7 +14,7 @@ RUN dotnet restore Auth.Api/Auth.Api.csproj
 COPY . .
 RUN dotnet publish Auth.Api/Auth.Api.csproj -c Release -o /app/publish /p:UseAppHost=false
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080

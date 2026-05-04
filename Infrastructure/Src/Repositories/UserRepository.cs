@@ -9,7 +9,8 @@ public sealed class UserRepository(AppDbContext dbContext) : IUserRepository
 {
     public void Add(User user) => dbContext.Users.Add(user);
 
-    public Task<User?> GetByIdAsync(Guid userId, bool includeRoles = false, CancellationToken cancellationToken = default)
+    public Task<User?> GetByIdAsync(Guid userId, bool includeRoles = false,
+        CancellationToken cancellationToken = default)
     {
         IQueryable<User> query = dbContext.Users;
         if (includeRoles)
@@ -22,7 +23,8 @@ public sealed class UserRepository(AppDbContext dbContext) : IUserRepository
         return query.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
     }
 
-    public Task<User?> GetByNormalizedEmailAsync(string normalizedEmail, bool includeRoles = false, CancellationToken cancellationToken = default)
+    public Task<User?> GetByNormalizedEmailAsync(string normalizedEmail, bool includeRoles = false,
+        CancellationToken cancellationToken = default)
     {
         IQueryable<User> query = dbContext.Users;
         if (includeRoles)
@@ -35,7 +37,8 @@ public sealed class UserRepository(AppDbContext dbContext) : IUserRepository
         return query.FirstOrDefaultAsync(x => x.NormalizedEmail == normalizedEmail, cancellationToken);
     }
 
-    public Task<bool> ExistsByNormalizedEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default)
+    public Task<bool> ExistsByNormalizedEmailAsync(string normalizedEmail,
+        CancellationToken cancellationToken = default)
     {
         return dbContext.Users.AnyAsync(x => x.NormalizedEmail == normalizedEmail, cancellationToken);
     }
@@ -60,7 +63,8 @@ public sealed class UserRepository(AppDbContext dbContext) : IUserRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task AssignRolesAsync(User user, IReadOnlyCollection<Role> roles, string? assignedBy, CancellationToken cancellationToken = default)
+    public async Task AssignRolesAsync(User user, IReadOnlyCollection<Role> roles, string? assignedBy,
+        CancellationToken cancellationToken = default)
     {
         var existingRoleIds = await dbContext.UserRoles
             .Where(x => x.UserId == user.Id)

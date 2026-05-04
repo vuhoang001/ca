@@ -11,6 +11,7 @@ public sealed class RevokedAccessTokenRepository(AppDbContext dbContext) : IRevo
 
     public Task<bool> ExistsActiveAsync(string jwtId, CancellationToken cancellationToken = default)
     {
-        return dbContext.RevokedAccessTokens.AnyAsync(x => x.JwtId == jwtId && x.ExpiresAtUtc > DateTime.UtcNow, cancellationToken);
+        return dbContext.RevokedAccessTokens.AnyAsync(x => x.JwtId == jwtId && x.ExpiresAtUtc > DateTime.UtcNow,
+                                                      cancellationToken);
     }
 }

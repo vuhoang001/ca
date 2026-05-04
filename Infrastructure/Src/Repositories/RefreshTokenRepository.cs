@@ -9,7 +9,8 @@ public sealed class RefreshTokenRepository(AppDbContext dbContext) : IRefreshTok
 {
     public void Add(RefreshToken refreshToken) => dbContext.RefreshTokens.Add(refreshToken);
 
-    public Task<RefreshToken?> GetByTokenHashAsync(string tokenHash, bool includeUser = false, CancellationToken cancellationToken = default)
+    public Task<RefreshToken?> GetByTokenHashAsync(string tokenHash, bool includeUser = false,
+        CancellationToken cancellationToken = default)
     {
         IQueryable<RefreshToken> query = dbContext.RefreshTokens;
         if (includeUser)

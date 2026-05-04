@@ -1,4 +1,3 @@
-
 using Application.Common;
 using Application.Features.Users.Commands;
 using Application.Features.Users.Queries;
