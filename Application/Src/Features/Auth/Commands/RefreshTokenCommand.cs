@@ -48,8 +48,8 @@ public sealed class RefreshTokenCommandHandler(
                 ?? throw new UnauthorizedException("Unknown client application.");
         }
 
-        var user        = currentRefreshToken.User;
-        var roles       = await userRepository.GetRoleNamesAsync(user.Id, cancellationToken);
+        var user = currentRefreshToken.User;
+        var roles = await userRepository.GetRoleNamesAsync(user.Id, cancellationToken);
         var permissions = await userRepository.GetPermissionCodesAsync(user.Id, cancellationToken);
         var tokenResult = tokenService.GenerateTokens(user.Id, user.Email, user.UserName, user.TenantId, roles,
                                                       permissions, clientApp?.ClientId);

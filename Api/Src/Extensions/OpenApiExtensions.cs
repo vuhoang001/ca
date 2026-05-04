@@ -13,19 +13,19 @@ public static class OpenApiExtensions
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title       = "Auth Service API",
-                Version     = "v1",
+                Title = "Auth Service API",
+                Version = "v1",
                 Description = "Centralized authentication and authorization service."
             });
 
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Name         = "Authorization",
-                Type         = SecuritySchemeType.Http,
-                Scheme       = "bearer",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
                 BearerFormat = "JWT",
-                In           = ParameterLocation.Header,
-                Description  = "Enter JWT bearer token."
+                In = ParameterLocation.Header,
+                Description = "Enter JWT bearer token."
             });
 
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -49,8 +49,8 @@ public static class OpenApiExtensions
 
     public static async Task InitializeDatabaseAsync(this IServiceProvider services)
     {
-        using var scope     = services.CreateScope();
-        var       dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        using var scope = services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await dbContext.Database.MigrateAsync();
         var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
         await seeder.SeedAsync();

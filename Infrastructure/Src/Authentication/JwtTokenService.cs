@@ -11,7 +11,7 @@ namespace Infrastructure.Authentication;
 
 public sealed class JwtTokenService(IOptions<JwtOptions> options) : ITokenService
 {
-    private readonly JwtOptions              _options      = options.Value;
+    private readonly JwtOptions _options = options.Value;
     private readonly JwtSecurityTokenHandler _tokenHandler = new();
 
     public TokenGenerationResult GenerateTokens(
@@ -23,9 +23,9 @@ public sealed class JwtTokenService(IOptions<JwtOptions> options) : ITokenServic
         IReadOnlyCollection<string> permissions,
         string? clientId)
     {
-        var now       = DateTime.UtcNow;
+        var now = DateTime.UtcNow;
         var expiresAt = now.AddMinutes(_options.AccessTokenMinutes);
-        var jwtId     = Guid.NewGuid().ToString("N");
+        var jwtId = Guid.NewGuid().ToString("N");
 
         var claims = new List<Claim>
         {
@@ -53,14 +53,14 @@ public sealed class JwtTokenService(IOptions<JwtOptions> options) : ITokenServic
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SigningKey));
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject            = new ClaimsIdentity(claims),
-            Expires            = expiresAt,
-            Issuer             = _options.Issuer,
-            Audience           = _options.Audience,
+            Subject = new ClaimsIdentity(claims),
+            Expires = expiresAt,
+            Issuer = _options.Issuer,
+            Audience = _options.Audience,
             SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
         };
 
-        var token        = _tokenHandler.CreateToken(tokenDescriptor);
+        var token = _tokenHandler.CreateToken(tokenDescriptor);
         var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
 
         return new TokenGenerationResult(
@@ -82,13 +82,13 @@ public sealed class JwtTokenService(IOptions<JwtOptions> options) : ITokenServic
     {
         var validationParameters = new TokenValidationParameters
         {
-            ValidateIssuer           = true,
-            ValidIssuer              = _options.Issuer,
-            ValidateAudience         = true,
-            ValidAudience            = _options.Audience,
+            ValidateIssuer = true,
+            ValidIssuer = _options.Issuer,
+            ValidateAudience = true,
+            ValidAudience = _options.Audience,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey         = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SigningKey)),
-            ValidateLifetime         = false
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SigningKey)),
+            ValidateLifetime = false
         };
 
         var principal = _tokenHandler.ValidateToken(accessToken, validationParameters, out var validatedToken);

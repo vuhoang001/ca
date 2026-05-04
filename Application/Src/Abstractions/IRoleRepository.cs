@@ -8,8 +8,8 @@ namespace Application.Abstractions;
 
 public interface IRoleRepository
 {
-    void        Add(Role role);
-    void        Remove(Role role);
+    void Add(Role role);
+    void Remove(Role role);
     Task<Role?> GetByIdAsync(Guid roleId, bool includePermissions = false,
         CancellationToken cancellationToken = default);
 

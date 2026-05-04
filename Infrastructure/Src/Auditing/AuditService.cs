@@ -1,4 +1,5 @@
-using System.Text.Json; using Application.Abstractions;
+using System.Text.Json;
+using Application.Abstractions;
 using Domain.Entities;
 using Shared.Abstractions;
 

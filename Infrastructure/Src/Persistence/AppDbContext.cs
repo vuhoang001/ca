@@ -39,14 +39,14 @@ public sealed class AppDbContext(
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedAtUtc =   dateTimeProvider.UtcNow;
-                entry.Entity.CreatedBy    ??= currentUserContext.Email ?? "system";
+                entry.Entity.CreatedAtUtc = dateTimeProvider.UtcNow;
+                entry.Entity.CreatedBy ??= currentUserContext.Email ?? "system";
             }
 
             if (entry.State is EntityState.Modified or EntityState.Added)
             {
                 entry.Entity.LastModifiedAtUtc = dateTimeProvider.UtcNow;
-                entry.Entity.LastModifiedBy    = currentUserContext.Email ?? "system";
+                entry.Entity.LastModifiedBy = currentUserContext.Email ?? "system";
             }
         }
     }
