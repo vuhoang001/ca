@@ -9,10 +9,10 @@ public class ApplicationTestExample
     {
         // Arrange
         var expectedValue = 10;
-        
+
         // Act
         var result = 5 * 2;
-        
+
         // Assert
         Assert.Equal(expectedValue, result);
     }

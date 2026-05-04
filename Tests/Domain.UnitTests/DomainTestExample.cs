@@ -9,10 +9,10 @@ public class DomainTestExample
     {
         // Arrange
         var expectedValue = 5;
-        
+
         // Act
         var result = 2 + 3;
-        
+
         // Assert
         Assert.Equal(expectedValue, result);
     }

@@ -9,10 +9,10 @@ public class IntegrationTestExample
     {
         // Arrange
         var expectedValue = 15;
-        
+
         // Act
         var result = 10 + 5;
-        
+
         // Assert
         Assert.Equal(expectedValue, result);
     }
