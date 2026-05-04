@@ -1,0 +1,7 @@
+**/bin
+**/obj
+.idea
+.git
+*.user
+*.suo
+*.cache

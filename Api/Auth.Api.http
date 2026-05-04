@@ -1,0 +1,43 @@
+@AuthApi_Host = http://localhost:8080
+@accessToken = REPLACE_WITH_TOKEN
+
+### Health
+GET {{AuthApi_Host}}/api/v1/health
+
+### Register
+POST {{AuthApi_Host}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "user1@local.dev",
+  "userName": "user1",
+  "password": "User@123456",
+  "tenantId": null
+}
+
+### Login
+POST {{AuthApi_Host}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@local.dev",
+  "password": "Admin@123456",
+  "clientId": "default-web"
+}
+
+### Refresh Token
+POST {{AuthApi_Host}}/api/v1/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "REPLACE_WITH_REFRESH_TOKEN",
+  "clientId": "default-web"
+}
+
+### List Roles
+GET {{AuthApi_Host}}/api/v1/roles
+Authorization: Bearer {{accessToken}}
+
+### List Permissions
+GET {{AuthApi_Host}}/api/v1/permissions
+Authorization: Bearer {{accessToken}}
