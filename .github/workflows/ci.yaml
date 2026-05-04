@@ -7,6 +7,10 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+concurrency:
+  group: ci-build-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   DOTNET_VERSION: 8.0.x
   SOLUTION_PATH: ./AuthSystem.sln
