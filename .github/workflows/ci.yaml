@@ -1,0 +1,167 @@
+name: CI - BUILD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  DOTNET_VERSION: 8.0.x
+  SOLUTION_PATH: ./AuthSystem.sln
+  UNIT_TEST_PATH: ./Tests/Domain.UnitTests/Domain.UnitTests.csproj
+  APPLICATION_UNIT_TEST_PATH: ./Tests/Application.UnitTests/Application.UnitTests.csproj
+
+jobs:
+  build-and-unit-test:
+    name: Build and Unit test
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache nuget packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/global.json', '**/nuget.config') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      - name: Build solution
+        run: |
+          dotnet build ${{ env.SOLUTION_PATH }} \
+            --no-restore \
+            --configuration Release
+
+      - name: Check code formatting
+        run: |
+          dotnet format ${{ env.SOLUTION_PATH }} \
+            --verify-no-changes \
+            --severity warn
+
+      - name: Run Domain unit tests
+        run: |
+          dotnet test ${{ env.UNIT_TEST_PATH }} \
+            --no-build \
+            --configuration Release \
+            --logger "trx;LogFileName=domain_unit_tests.trx" \
+            --collect "XPlat Code Coverage" \
+            --results-directory ./test-results/domain
+
+      - name: Run Application unit tests
+        run: |
+          dotnet test ${{ env.APPLICATION_UNIT_TEST_PATH }} \
+            --no-build \
+            --configuration Release \
+            --logger "trx;LogFileName=application-results.trx" \
+            --collect "XPlat Code Coverage" \
+            --results-directory ./test-results/application
+
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: ./test-results/**/*.trx
+
+      - name: Publish application
+        run: |
+          dotnet publish ${{ env.SOLUTION_PATH }} \
+            --no-restore \
+            --configuration Release \
+            --output ./publish
+
+      - name: Upload published artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-artifact
+          path: ./publish
+          retention-days: 7
+
+  integration-tests:
+    name: Integration tests
+    runs-on: ubuntu-22.04
+    needs: build-and-unit-test
+
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          SA_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          ACCEPT_EULA: "Y"
+          MSSQL_PID: "Express"
+        ports:
+          - 1433:1433
+
+    env:
+      ConnectionStrings__AuthDb: Server=localhost,1433;Database=authdb;User Id=sa;Password=${{ secrets.DB_PASSWORD }};TrustServerCertificate=True;Encrypt=False
+      Jwt__Issuer: auth-service
+      Jwt__Audience: auth-clients
+      Jwt__SigningKey: ${{ secrets.JWT_SIGNING_KEY }}
+      Seed__AdminEmail: admin@example.com
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install EF Core CLI
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Cache nuget packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/global.json', '**/nuget.config') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      # 🔥 Wait DB ready (fix flaky test)
+      - name: Wait for SQL Server
+        run: |
+          for i in {1..20}; do
+            /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${{ secrets.DB_PASSWORD }}" -Q "SELECT 1" -C && break
+            echo "Waiting for SQL Server..."
+            sleep 5
+          done
+
+      - name: Run database migrations
+        run: |
+          dotnet ef database update \
+            --project ./Infrastructure/Infrastructure.csproj \
+            --startup-project ./Api/Api.csproj \
+            --configuration Release \
+            --connection "${{ env.ConnectionStrings__AuthDb }}"
+
+      - name: Run integration tests
+        run: |
+          dotnet test ./Tests/Integration.Tests/Integration.Tests.csproj \
+            --no-build \
+            --configuration Release \
+            --logger "trx;LogFileName=integration-results.trx" \
+            --results-directory ./test-results/integration
+
+      - name: Upload integration test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-results
+          path: ./test-results/integration/*.trx
