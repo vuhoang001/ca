@@ -12,6 +12,7 @@ env:
   SOLUTION_PATH: ./AuthSystem.sln
   UNIT_TEST_PATH: ./Tests/Domain.UnitTests/Domain.UnitTests.csproj
   APPLICATION_UNIT_TEST_PATH: ./Tests/Application.UnitTests/Application.UnitTests.csproj
+  INTEGRATION_TEST_PATH: ./Tests/Integration.Tests/Integration.Tests.csproj
 
 jobs:
   build-and-unit-test:
@@ -153,7 +154,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          dotnet test ./Tests/Integration.Tests/Integration.Tests.csproj \
+          dotnet test ${{ env.INTEGRATION_TEST_PATH }} \
             --no-build \
             --configuration Release \
             --logger "trx;LogFileName=integration-results.trx" \
