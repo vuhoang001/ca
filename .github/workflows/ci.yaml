@@ -135,7 +135,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
 
-      # 🔥 Wait DB ready (fix flaky test)
       - name: Wait for SQL Server
         run: |
           for i in {1..20}; do
@@ -155,7 +154,7 @@ jobs:
       - name: Run integration tests
         run: |
           dotnet test ${{ env.INTEGRATION_TEST_PATH }} \
-            --no-build \
+#            --no-build \
             --configuration Release \
             --logger "trx;LogFileName=integration-results.trx" \
             --results-directory ./test-results/integration
