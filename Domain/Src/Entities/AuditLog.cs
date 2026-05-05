@@ -1,4 +1,5 @@
 using Shared;
+using Shared.Kernel;
 
 namespace Domain.Entities;
 
@@ -6,7 +7,6 @@ public sealed class AuditLog : AuditableEntity
 {
     public Guid? TenantId { get; private set; }
     public Guid? UserId { get; private set; }
-    public Guid? ClientAppId { get; private set; }
     public string Action { get; private set; } = null!;
     public string EntityType { get; private set; } = null!;
     public string? EntityId { get; private set; }
@@ -16,14 +16,11 @@ public sealed class AuditLog : AuditableEntity
     public string? CorrelationId { get; private set; }
     public string Result { get; private set; } = null!;
 
-    private AuditLog()
-    {
-    }
+    private AuditLog() { }
 
     public AuditLog(
         Guid? tenantId,
         Guid? userId,
-        Guid? clientAppId,
         string action,
         string entityType,
         string? entityId,
@@ -35,7 +32,6 @@ public sealed class AuditLog : AuditableEntity
     {
         TenantId = tenantId;
         UserId = userId;
-        ClientAppId = clientAppId;
         Action = action;
         EntityType = entityType;
         EntityId = entityId;

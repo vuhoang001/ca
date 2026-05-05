@@ -1,0 +1,25 @@
+{
+  "id": "product-module/api-reference",
+  "title": "API Reference",
+  "description": "Base path: /api/v1/products",
+  "source": "@site/docs/06-product-module/api-reference.md",
+  "sourceDirName": "06-product-module",
+  "slug": "/product-module/api-reference",
+  "permalink": "/product-module/api-reference",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "API Reference"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Product Domain Design",
+    "permalink": "/product-module/domain-design"
+  },
+  "next": {
+    "title": "Example Requests",
+    "permalink": "/product-module/example-requests"
+  }
+}

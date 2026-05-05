@@ -1,0 +1,25 @@
+{
+  "id": "introduction/architecture-overview",
+  "title": "Architecture Overview",
+  "description": "Layer dependency graph",
+  "source": "@site/docs/01-introduction/architecture-overview.md",
+  "sourceDirName": "01-introduction",
+  "slug": "/introduction/architecture-overview",
+  "permalink": "/introduction/architecture-overview",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Architecture Overview"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Introduction",
+    "permalink": "/"
+  },
+  "next": {
+    "title": "Keycloak Overview",
+    "permalink": "/authentication/keycloak-overview"
+  }
+}

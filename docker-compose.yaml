@@ -6,12 +6,14 @@ networks:
 
 volumes:
   mssql-data:
+  keycloak-data:
+  rabbitmq-data:
 
 services:
-  # ── MSSQL ─────────────────────────────────────────────────────────────
+  # ── SQL Server ────────────────────────────────────────────────────────
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: myapp-mssql
+    container_name: masterdata-mssql
     restart: unless-stopped
     networks: [ app-network ]
     ports:
@@ -33,12 +35,58 @@ services:
       retries: 8
       start_period: 30s
 
-  # ── Application API ────────────────────────────────────────────────────
+  # ── Keycloak ──────────────────────────────────────────────────────────
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1
+    container_name: masterdata-keycloak
+    restart: unless-stopped
+    networks: [ app-network ]
+    ports:
+      - "8181:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: dev-file
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+    command: [ "start-dev", "--import-realm" ]
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+      - keycloak-data:/opt/keycloak/data
+    healthcheck:
+      test: [ "CMD", "curl", "-sf", "http://localhost:8080/realms/masterdata" ]
+      interval: 20s
+      timeout: 10s
+      retries: 15
+      start_period: 60s
+
+  # ── RabbitMQ ──────────────────────────────────────────────────────────
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: masterdata-rabbitmq
+    restart: unless-stopped
+    networks: [ app-network ]
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # Management UI  →  http://localhost:15672  (guest/guest)
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 15s
+      timeout: 10s
+      retries: 8
+      start_period: 30s
+
+  # ── API ───────────────────────────────────────────────────────────────
   api:
     build:
       context: .
       dockerfile: Api/Dockerfile
-    container_name: myapp-api
+    container_name: masterdata-api
     restart: unless-stopped
     networks: [ app-network ]
     ports:
@@ -46,12 +94,25 @@ services:
     depends_on:
       mssql:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8080"
-      ConnectionStrings__AuthDb: >-
-        Server=mssql,1433;Database=MyAppDb;User Id=sa;
+      ConnectionStrings__MasterDataDb: >-
+        Server=mssql,1433;Database=MasterDataDb;User Id=sa;
         Password=Dev@Passw0rd!;TrustServerCertificate=True;
+      Keycloak__Authority: "http://keycloak:8080/realms/masterdata"
+      Keycloak__Audience: "masterdata-api"
+      Keycloak__ClientId: "masterdata-api"
+      Keycloak__RequireHttpsMetadata: "false"
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__Port: "5672"
+      RabbitMq__VirtualHost: "/"
+      RabbitMq__Username: "guest"
+      RabbitMq__Password: "guest"
     volumes:
       - ./logs:/app/logs
     healthcheck:

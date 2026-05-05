@@ -1,0 +1,25 @@
+{
+  "id": "product-module/domain-design",
+  "title": "Product Domain Design",
+  "description": "Entity",
+  "source": "@site/docs/06-product-module/domain-design.md",
+  "sourceDirName": "06-product-module",
+  "slug": "/product-module/domain-design",
+  "permalink": "/product-module/domain-design",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Product Domain Design"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Clean Architecture Rules",
+    "permalink": "/development-guide/clean-architecture-rules"
+  },
+  "next": {
+    "title": "API Reference",
+    "permalink": "/product-module/api-reference"
+  }
+}

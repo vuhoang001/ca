@@ -1,4 +1,4 @@
-namespace Shared;
+namespace Shared.Kernel;
 
 public abstract class AuditableEntity : Entity
 {

@@ -1,0 +1,25 @@
+{
+  "id": "development-guide/clean-architecture-rules",
+  "title": "Clean Architecture Rules",
+  "description": "Dependency direction",
+  "source": "@site/docs/05-development-guide/clean-architecture-rules.md",
+  "sourceDirName": "05-development-guide",
+  "slug": "/development-guide/clean-architecture-rules",
+  "permalink": "/development-guide/clean-architecture-rules",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Clean Architecture Rules"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Add a New Module",
+    "permalink": "/development-guide/add-new-module"
+  },
+  "next": {
+    "title": "Product Domain Design",
+    "permalink": "/product-module/domain-design"
+  }
+}

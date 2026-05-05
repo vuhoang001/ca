@@ -1,0 +1,113 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/",
+          "mainDocId": "introduction/index",
+          "docs": [
+            {
+              "id": "authentication/jwt-validation-flow",
+              "path": "/authentication/jwt-validation-flow",
+              "sidebar": "docs"
+            },
+            {
+              "id": "authentication/keycloak-overview",
+              "path": "/authentication/keycloak-overview",
+              "sidebar": "docs"
+            },
+            {
+              "id": "authentication/token-structure",
+              "path": "/authentication/token-structure",
+              "sidebar": "docs"
+            },
+            {
+              "id": "authorization/keycloak-roles-mapping",
+              "path": "/authorization/keycloak-roles-mapping",
+              "sidebar": "docs"
+            },
+            {
+              "id": "authorization/protect-endpoints",
+              "path": "/authorization/protect-endpoints",
+              "sidebar": "docs"
+            },
+            {
+              "id": "authorization/role-based-model",
+              "path": "/authorization/role-based-model",
+              "sidebar": "docs"
+            },
+            {
+              "id": "deployment/docker-setup",
+              "path": "/deployment/docker-setup",
+              "sidebar": "docs"
+            },
+            {
+              "id": "deployment/environment-variables",
+              "path": "/deployment/environment-variables",
+              "sidebar": "docs"
+            },
+            {
+              "id": "development-guide/add-new-module",
+              "path": "/development-guide/add-new-module",
+              "sidebar": "docs"
+            },
+            {
+              "id": "development-guide/clean-architecture-rules",
+              "path": "/development-guide/clean-architecture-rules",
+              "sidebar": "docs"
+            },
+            {
+              "id": "introduction/architecture-overview",
+              "path": "/introduction/architecture-overview",
+              "sidebar": "docs"
+            },
+            {
+              "id": "introduction/index",
+              "path": "/",
+              "sidebar": "docs"
+            },
+            {
+              "id": "product-module/api-reference",
+              "path": "/product-module/api-reference",
+              "sidebar": "docs"
+            },
+            {
+              "id": "product-module/domain-design",
+              "path": "/product-module/domain-design",
+              "sidebar": "docs"
+            },
+            {
+              "id": "product-module/example-requests",
+              "path": "/product-module/example-requests",
+              "sidebar": "docs"
+            },
+            {
+              "id": "setup-guide/configure-backend",
+              "path": "/setup-guide/configure-backend",
+              "sidebar": "docs"
+            },
+            {
+              "id": "setup-guide/run-keycloak",
+              "path": "/setup-guide/run-keycloak",
+              "sidebar": "docs"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "docs": {
+              "link": {
+                "path": "/",
+                "label": "Introduction"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

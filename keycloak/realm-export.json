@@ -1,0 +1,109 @@
+{
+  "realm": "masterdata",
+  "enabled": true,
+  "displayName": "MasterData Realm",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "admin",
+        "description": "Full administrative access to all resources"
+      },
+      {
+        "name": "masterdata-reader",
+        "description": "Read-only access to masterdata resources"
+      },
+      {
+        "name": "masterdata-writer",
+        "description": "Create, update, and delete access to masterdata resources"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "masterdata-api",
+      "name": "MasterData API",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "masterdata-api-secret-change-in-prod",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "bearerOnly": false,
+      "publicClient": false,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:3000/*",
+        "http://localhost:8080/*",
+        "http://localhost:5000/*"
+      ],
+      "webOrigins": [ "*" ],
+      "defaultClientScopes": [ "web-origins", "profile", "roles", "email" ],
+      "protocolMappers": [
+        {
+          "name": "audience-mapper",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "masterdata-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "email": "admin@masterdata.local",
+      "firstName": "Admin",
+      "lastName": "User",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Admin@123456",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [ "admin", "masterdata-writer", "masterdata-reader" ]
+    },
+    {
+      "username": "writer",
+      "enabled": true,
+      "email": "writer@masterdata.local",
+      "firstName": "Writer",
+      "lastName": "User",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Writer@123456",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [ "masterdata-writer", "masterdata-reader" ]
+    },
+    {
+      "username": "reader",
+      "enabled": true,
+      "email": "reader@masterdata.local",
+      "firstName": "Reader",
+      "lastName": "User",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Reader@123456",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [ "masterdata-reader" ]
+    }
+  ]
+}

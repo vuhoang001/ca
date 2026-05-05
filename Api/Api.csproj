@@ -45,7 +45,6 @@
         <PackageReference Include="Serilog.AspNetCore"/>
         <PackageReference Include="Serilog.Settings.Configuration"/>
         <PackageReference Include="Swashbuckle.AspNetCore"/>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt"/>
     </ItemGroup>
 
 </Project>

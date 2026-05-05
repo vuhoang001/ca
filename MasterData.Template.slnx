@@ -1,0 +1,12 @@
+<Solution>
+  <Project Path="Api/Api.csproj" />
+  <Project Path="Application/Application.csproj" />
+  <Project Path="Infrastructure/Infrastructure.csproj" />
+  <Project Path="Domain/Domain.csproj" />
+  <Project Path="Shared/Shared.csproj" />
+  <Project Path="AppHost/AppHost.csproj" />
+  <Project Path="ServiceDefaults/ServiceDefaults.csproj" />
+  <Project Path="Tests/Domain.UnitTests/Domain.UnitTests.csproj" />
+  <Project Path="Tests/Application.UnitTests/Application.UnitTests.csproj" />
+  <Project Path="Tests/Integration.Tests/Integration.Tests.csproj" />
+</Solution>

@@ -1,0 +1,25 @@
+{
+  "id": "authorization/protect-endpoints",
+  "title": "Protecting Endpoints",
+  "description": "Basic pattern",
+  "source": "@site/docs/03-authorization/protect-endpoints.md",
+  "sourceDirName": "03-authorization",
+  "slug": "/authorization/protect-endpoints",
+  "permalink": "/authorization/protect-endpoints",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Protecting Endpoints"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Keycloak Roles Mapping",
+    "permalink": "/authorization/keycloak-roles-mapping"
+  },
+  "next": {
+    "title": "Run Keycloak",
+    "permalink": "/setup-guide/run-keycloak"
+  }
+}

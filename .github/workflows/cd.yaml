@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DOCKER_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/auth-system
+  DOCKER_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/masterdata-template
 
 jobs:
   build-and-publish:
@@ -32,8 +32,6 @@ jobs:
           RUN="${{ github.run_number }}"
           SHA="${{ github.event.workflow_run.head_sha }}"
           SHORT_SHA="${SHA:0:7}"
-
-          # main-42-abc1234
           echo "build_tag=${BRANCH}-${RUN}-${SHORT_SHA}" >> $GITHUB_OUTPUT
           echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
 
@@ -53,7 +51,6 @@ jobs:
           images: ${{ env.DOCKER_IMAGE }}
           tags: |
             type=raw,value=${{ steps.vars.outputs.build_tag }}
-
             type=raw,value=latest,enable=${{ steps.vars.outputs.branch == 'main' }}
             type=raw,value=staging,enable=${{ steps.vars.outputs.branch == 'develop' }}
 

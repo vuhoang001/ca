@@ -1,0 +1,25 @@
+{
+  "id": "setup-guide/run-keycloak",
+  "title": "Run Keycloak",
+  "description": "Option A — docker-compose (recommended)",
+  "source": "@site/docs/04-setup-guide/run-keycloak.md",
+  "sourceDirName": "04-setup-guide",
+  "slug": "/setup-guide/run-keycloak",
+  "permalink": "/setup-guide/run-keycloak",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Run Keycloak"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Protecting Endpoints",
+    "permalink": "/authorization/protect-endpoints"
+  },
+  "next": {
+    "title": "Configure Backend",
+    "permalink": "/setup-guide/configure-backend"
+  }
+}

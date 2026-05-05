@@ -1,0 +1,25 @@
+{
+  "id": "setup-guide/configure-backend",
+  "title": "Configure Backend",
+  "description": "appsettings.json",
+  "source": "@site/docs/04-setup-guide/configure-backend.md",
+  "sourceDirName": "04-setup-guide",
+  "slug": "/setup-guide/configure-backend",
+  "permalink": "/setup-guide/configure-backend",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Configure Backend"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Run Keycloak",
+    "permalink": "/setup-guide/run-keycloak"
+  },
+  "next": {
+    "title": "Add a New Module",
+    "permalink": "/development-guide/add-new-module"
+  }
+}

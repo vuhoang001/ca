@@ -1,0 +1,25 @@
+{
+  "id": "development-guide/add-new-module",
+  "title": "Add a New Module",
+  "description": "Follow these steps to add, for example, a Category module:",
+  "source": "@site/docs/05-development-guide/add-new-module.md",
+  "sourceDirName": "05-development-guide",
+  "slug": "/development-guide/add-new-module",
+  "permalink": "/development-guide/add-new-module",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Add a New Module"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Configure Backend",
+    "permalink": "/setup-guide/configure-backend"
+  },
+  "next": {
+    "title": "Clean Architecture Rules",
+    "permalink": "/development-guide/clean-architecture-rules"
+  }
+}

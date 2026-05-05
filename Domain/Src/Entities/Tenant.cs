@@ -1,4 +1,5 @@
 using Shared;
+using Shared.Kernel;
 
 namespace Domain.Entities;
 

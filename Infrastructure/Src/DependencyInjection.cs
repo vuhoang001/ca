@@ -1,20 +1,19 @@
-using System.Text;
-using Api.Application;
 using Application.Abstractions;
 using Infrastructure.Auditing;
-using Infrastructure.Authentication;
+using Infrastructure.Keycloak;
+using Infrastructure.Messaging;
 using Infrastructure.Options;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
-using Infrastructure.Seed;
 using Infrastructure.Services;
+using MassTransit;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Shared;
 using Shared.Abstractions;
 
@@ -30,81 +29,67 @@ public static class DependencyInjection
         services.AddScoped<IDomainEventDispatcher, MediatorDomainEventDispatcher>();
         services.AddScoped<ISaveChangesInterceptor, EventDispatchInterceptor>();
 
-        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
-        services.Configure<SeedOptions>(configuration.GetSection(SeedOptions.SectionName));
+        services.Configure<KeycloakOptions>(configuration.GetSection(KeycloakOptions.Section));
+        var keycloakOptions = configuration.GetSection(KeycloakOptions.Section).Get<KeycloakOptions>() ?? new KeycloakOptions();
 
-        var connectionString = configuration.GetConnectionString("AuthDb") ??
-            throw new InvalidOperationException("Connection string 'AuthDb' not found.");
+        var connectionString = configuration.GetConnectionString("MasterDataDb")
+            ?? throw new InvalidOperationException("Connection string 'MasterDataDb' not found.");
 
         services.AddDbContext<AppDbContext>((provider, options) =>
         {
             var interceptors = provider.GetServices<ISaveChangesInterceptor>().ToArray<IInterceptor>();
-
             options.UseSqlServer(connectionString,
-                                 builder => builder.MigrationsAssembly(
-                                     typeof(AppDbContext).Assembly.FullName));
-
+                b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
             if (interceptors.Length != 0)
-            {
                 options.AddInterceptors(interceptors);
+        });
+
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<AppDbContext>());
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+        services.AddScoped<IAuditService, AuditService>();
+        services.AddScoped<IEventBus, MassTransitEventBus>();
+
+        var rabbitMqOptions = configuration.GetSection(RabbitMqOptions.Section).Get<RabbitMqOptions>() ?? new RabbitMqOptions();
+        services.AddMassTransit(x =>
+        {
+            if (!rabbitMqOptions.IsConfigured)
+            {
+                // Dev/test: không cần broker, message được route trong process
+                x.UsingInMemory((ctx, cfg) => cfg.ConfigureEndpoints(ctx));
+            }
+            else
+            {
+                x.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(rabbitMqOptions.Host, rabbitMqOptions.Port, rabbitMqOptions.VirtualHost, h =>
+                    {
+                        h.Username(rabbitMqOptions.Username);
+                        h.Password(rabbitMqOptions.Password);
+                    });
+                    cfg.ConfigureEndpoints(ctx);
+                });
             }
         });
 
-        services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<AppDbContext>());
+        services.AddTransient<IClaimsTransformation, KeycloakClaimsTransformation>();
 
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IPermissionRepository, PermissionRepository>();
-        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-        services.AddScoped<IClientAppRepository, ClientAppRepository>();
-        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
-        services.AddScoped<IRevokedAccessTokenRepository, RevokedAccessTokenRepository>();
-
-        services.AddScoped<IPasswordService, PasswordService>();
-        services.AddScoped<ITokenService, JwtTokenService>();
-        services.AddScoped<IAuditService, AuditService>();
-        services.AddScoped<DbSeeder>();
-
-        services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
-
-        var jwtOptions = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>() ?? new JwtOptions();
-
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(opts =>
             {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidateAudience = true,
-                    ValidAudience = jwtOptions.Audience,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey)),
-                    ClockSkew = TimeSpan.FromSeconds(30)
-                };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnTokenValidated = async context =>
-                    {
-                        var revokedRepository = context.HttpContext.RequestServices
-                            .GetRequiredService<IRevokedAccessTokenRepository>();
-                        var jwtId = context.Principal?.FindFirst("jti")?.Value;
-
-                        if (!string.IsNullOrWhiteSpace(jwtId) &&
-                            await revokedRepository.ExistsActiveAsync(jwtId, context.HttpContext.RequestAborted))
-                        {
-                            context.Fail("Token has been revoked.");
-                        }
-                    }
-                };
+                opts.Authority = keycloakOptions.Authority;
+                opts.Audience = keycloakOptions.Audience;
+                opts.RequireHttpsMetadata = keycloakOptions.RequireHttpsMetadata;
+                opts.TokenValidationParameters.ValidateLifetime = true;
+                opts.TokenValidationParameters.ClockSkew = TimeSpan.FromSeconds(30);
             });
 
-        services.AddAuthorizationBuilder()
+        services
+            .AddAuthorizationBuilder()
             .SetFallbackPolicy(new AuthorizationPolicyBuilder()
-                                   .RequireAuthenticatedUser()
-                                   .Build());
+                .RequireAuthenticatedUser()
+                .Build());
 
         return services;
     }

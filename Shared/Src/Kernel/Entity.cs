@@ -1,6 +1,6 @@
 using Shared.Primitives;
 
-namespace Shared;
+namespace Shared.Kernel;
 
 public abstract class Entity : HasDomainEvents
 {

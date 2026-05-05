@@ -21,7 +21,6 @@ public sealed class AuditService(
         var auditLog = new AuditLog(
             currentUserContext.TenantId,
             currentUserContext.UserId,
-            null,
             action,
             entityType,
             entityId,

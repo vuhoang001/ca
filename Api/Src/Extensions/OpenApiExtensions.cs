@@ -1,5 +1,4 @@
 using Infrastructure.Persistence;
-using Infrastructure.Seed;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,9 +12,9 @@ public static class OpenApiExtensions
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Auth Service API",
+                Title = "MasterData API",
                 Version = "v1",
-                Description = "Centralized authentication and authorization service."
+                Description = "Production-ready MasterData service template with Keycloak authentication."
             });
 
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -25,7 +24,7 @@ public static class OpenApiExtensions
                 Scheme = "bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
-                Description = "Enter JWT bearer token."
+                Description = "Enter the JWT bearer token issued by Keycloak."
             });
 
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -33,11 +32,7 @@ public static class OpenApiExtensions
                 {
                     new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id   = "Bearer"
-                        }
+                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
                     },
                     Array.Empty<string>()
                 }
@@ -50,7 +45,5 @@ public static class OpenApiExtensions
         using var scope = services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await dbContext.Database.MigrateAsync();
-        var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
-        await seeder.SeedAsync();
     }
 }

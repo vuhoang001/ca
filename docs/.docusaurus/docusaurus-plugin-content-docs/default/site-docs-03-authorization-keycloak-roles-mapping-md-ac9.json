@@ -1,0 +1,25 @@
+{
+  "id": "authorization/keycloak-roles-mapping",
+  "title": "Keycloak Roles Mapping",
+  "description": "How roles reach ASP.NET Core",
+  "source": "@site/docs/03-authorization/keycloak-roles-mapping.md",
+  "sourceDirName": "03-authorization",
+  "slug": "/authorization/keycloak-roles-mapping",
+  "permalink": "/authorization/keycloak-roles-mapping",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Keycloak Roles Mapping"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Role-Based Model",
+    "permalink": "/authorization/role-based-model"
+  },
+  "next": {
+    "title": "Protecting Endpoints",
+    "permalink": "/authorization/protect-endpoints"
+  }
+}

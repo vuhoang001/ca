@@ -1,0 +1,25 @@
+{
+  "id": "authentication/keycloak-overview",
+  "title": "Keycloak Overview",
+  "description": "This template does not issue tokens — it only validates them. Keycloak is the sole identity provider.",
+  "source": "@site/docs/02-authentication/keycloak-overview.md",
+  "sourceDirName": "02-authentication",
+  "slug": "/authentication/keycloak-overview",
+  "permalink": "/authentication/keycloak-overview",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Keycloak Overview"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Architecture Overview",
+    "permalink": "/introduction/architecture-overview"
+  },
+  "next": {
+    "title": "JWT Validation Flow",
+    "permalink": "/authentication/jwt-validation-flow"
+  }
+}

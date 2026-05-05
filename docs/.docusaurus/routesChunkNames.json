@@ -1,0 +1,126 @@
+{
+  "/__docusaurus/debug-5ff": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---docusaurus-debugb-38-ad3"
+    }
+  },
+  "/__docusaurus/debug/config-5ba": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---docusaurus-debugb-38-ad3"
+    }
+  },
+  "/__docusaurus/debug/content-a2b": {
+    "__comp": "__comp---theme-debug-contentba-8-ce7",
+    "__context": {
+      "plugin": "plugin---docusaurus-debugb-38-ad3"
+    },
+    "__props": "__props---docusaurus-debug-content-3-c-0-be2"
+  },
+  "/__docusaurus/debug/globalData-c3c": {
+    "__comp": "__comp---theme-debug-global-dataede-0fa",
+    "__context": {
+      "plugin": "plugin---docusaurus-debugb-38-ad3"
+    }
+  },
+  "/__docusaurus/debug/metadata-156": {
+    "__comp": "__comp---theme-debug-site-metadata-68-e-3d4",
+    "__context": {
+      "plugin": "plugin---docusaurus-debugb-38-ad3"
+    }
+  },
+  "/__docusaurus/debug/registry-88c": {
+    "__comp": "__comp---theme-debug-registry-679-501",
+    "__context": {
+      "plugin": "plugin---docusaurus-debugb-38-ad3"
+    }
+  },
+  "/__docusaurus/debug/routes-000": {
+    "__comp": "__comp---theme-debug-routes-946-699",
+    "__context": {
+      "plugin": "plugin---docusaurus-debugb-38-ad3"
+    }
+  },
+  "/-f3b": {
+    "__comp": "__comp---theme-docs-root-5-e-9-0b6",
+    "__context": {
+      "plugin": "plugin---aba-d70"
+    }
+  },
+  "/-163": {
+    "__comp": "__comp---theme-doc-version-roota-7-b-5de",
+    "__props": "__props---22-d-307"
+  },
+  "/-7f9": {
+    "__comp": "__comp---theme-doc-roota-94-67a"
+  },
+  "/authentication/jwt-validation-flow-dc7": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---authentication-jwt-validation-flow-65-c-b45"
+  },
+  "/authentication/keycloak-overview-048": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---authentication-keycloak-overviewf-3-b-425"
+  },
+  "/authentication/token-structure-5be": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---authentication-token-structure-351-286"
+  },
+  "/authorization/keycloak-roles-mapping-dfc": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---authorization-keycloak-roles-mappingac-9-4c0"
+  },
+  "/authorization/protect-endpoints-873": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---authorization-protect-endpoints-124-128"
+  },
+  "/authorization/role-based-model-133": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---authorization-role-based-model-711-d6e"
+  },
+  "/deployment/docker-setup-fc7": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---deployment-docker-setup-85-f-d19"
+  },
+  "/deployment/environment-variables-316": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---deployment-environment-variables-626-6a6"
+  },
+  "/development-guide/add-new-module-efb": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---development-guide-add-new-module-7-e-2-e91"
+  },
+  "/development-guide/clean-architecture-rules-429": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---development-guide-clean-architecture-rules-525-00a"
+  },
+  "/introduction/architecture-overview-341": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---introduction-architecture-overviewbad-f36"
+  },
+  "/product-module/api-reference-3f3": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---product-module-api-referenced-50-b66"
+  },
+  "/product-module/domain-design-f4f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---product-module-domain-designfe-7-285"
+  },
+  "/product-module/example-requests-6b6": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---product-module-example-requestsd-41-bc2"
+  },
+  "/setup-guide/configure-backend-873": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---setup-guide-configure-backend-806-6d3"
+  },
+  "/setup-guide/run-keycloak-659": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---setup-guide-run-keycloak-059-f94"
+  },
+  "/-4b0": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---86-f-c28"
+  }
+}

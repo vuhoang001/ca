@@ -10,10 +10,7 @@ public static class EndpointExtensions
 
         IEndpointModule[] modules =
         [
-            new V1.AuthEndpoints(),
-            new V1.UserEndpoints(),
-            new V1.RoleEndpoints(),
-            new V1.PermissionEndpoints(),
+            new V1.ProductEndpoints(),
             new V1.HealthEndpoints()
         ];
 

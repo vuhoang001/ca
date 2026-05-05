@@ -1,0 +1,25 @@
+{
+  "id": "authorization/role-based-model",
+  "title": "Role-Based Model",
+  "description": "Predefined roles",
+  "source": "@site/docs/03-authorization/role-based-model.md",
+  "sourceDirName": "03-authorization",
+  "slug": "/authorization/role-based-model",
+  "permalink": "/authorization/role-based-model",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Role-Based Model"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Token Structure",
+    "permalink": "/authentication/token-structure"
+  },
+  "next": {
+    "title": "Keycloak Roles Mapping",
+    "permalink": "/authorization/keycloak-roles-mapping"
+  }
+}

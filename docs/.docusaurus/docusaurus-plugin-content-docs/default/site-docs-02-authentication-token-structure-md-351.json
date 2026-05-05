@@ -1,0 +1,25 @@
+{
+  "id": "authentication/token-structure",
+  "title": "Token Structure",
+  "description": "Keycloak JWT payload (decoded)",
+  "source": "@site/docs/02-authentication/token-structure.md",
+  "sourceDirName": "02-authentication",
+  "slug": "/authentication/token-structure",
+  "permalink": "/authentication/token-structure",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Token Structure"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "JWT Validation Flow",
+    "permalink": "/authentication/jwt-validation-flow"
+  },
+  "next": {
+    "title": "Role-Based Model",
+    "permalink": "/authorization/role-based-model"
+  }
+}

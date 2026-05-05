@@ -1,0 +1,25 @@
+{
+  "id": "deployment/docker-setup",
+  "title": "Docker Setup",
+  "description": "Development",
+  "source": "@site/docs/07-deployment/docker-setup.md",
+  "sourceDirName": "07-deployment",
+  "slug": "/deployment/docker-setup",
+  "permalink": "/deployment/docker-setup",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Docker Setup"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Example Requests",
+    "permalink": "/product-module/example-requests"
+  },
+  "next": {
+    "title": "Environment Variables",
+    "permalink": "/deployment/environment-variables"
+  }
+}

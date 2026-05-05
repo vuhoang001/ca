@@ -13,7 +13,7 @@ concurrency:
 
 env:
   DOTNET_VERSION: 8.0.x
-  SOLUTION_PATH: ./AuthSystem.sln
+  SOLUTION_PATH: ./MasterData.Template.sln
   UNIT_TEST_PATH: ./Tests/Domain.UnitTests/Domain.UnitTests.csproj
   APPLICATION_UNIT_TEST_PATH: ./Tests/Application.UnitTests/Application.UnitTests.csproj
   INTEGRATION_TEST_PATH: ./Tests/Integration.Tests/Integration.Tests.csproj

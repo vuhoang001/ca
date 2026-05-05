@@ -2,6 +2,7 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.Abstractions;
+using Shared.Kernel;
 
 namespace Infrastructure.Persistence;
 
@@ -11,14 +12,7 @@ public sealed class AppDbContext(
     ICurrentUserContext currentUserContext) : DbContext(options), IUnitOfWork
 {
     public DbSet<Tenant> Tenants => Set<Tenant>();
-    public DbSet<User> Users => Set<User>();
-    public DbSet<Role> Roles => Set<Role>();
-    public DbSet<Permission> Permissions => Set<Permission>();
-    public DbSet<UserRole> UserRoles => Set<UserRole>();
-    public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
-    public DbSet<ClientApp> ClientApps => Set<ClientApp>();
-    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-    public DbSet<RevokedAccessToken> RevokedAccessTokens => Set<RevokedAccessToken>();
+    public DbSet<Product> Products => Set<Product>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,13 +34,13 @@ public sealed class AppDbContext(
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.CreatedAtUtc = dateTimeProvider.UtcNow;
-                entry.Entity.CreatedBy ??= currentUserContext.Email ?? "system";
+                entry.Entity.CreatedBy ??= currentUserContext.Email ?? currentUserContext.Username ?? "system";
             }
 
             if (entry.State is EntityState.Modified or EntityState.Added)
             {
                 entry.Entity.LastModifiedAtUtc = dateTimeProvider.UtcNow;
-                entry.Entity.LastModifiedBy = currentUserContext.Email ?? "system";
+                entry.Entity.LastModifiedBy = currentUserContext.Email ?? currentUserContext.Username ?? "system";
             }
         }
     }

@@ -1,0 +1,25 @@
+{
+  "id": "product-module/example-requests",
+  "title": "Example Requests",
+  "description": "Step 1: Get a token",
+  "source": "@site/docs/06-product-module/example-requests.md",
+  "sourceDirName": "06-product-module",
+  "slug": "/product-module/example-requests",
+  "permalink": "/product-module/example-requests",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Example Requests"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "API Reference",
+    "permalink": "/product-module/api-reference"
+  },
+  "next": {
+    "title": "Docker Setup",
+    "permalink": "/deployment/docker-setup"
+  }
+}
