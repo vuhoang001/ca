@@ -1,4 +1,4 @@
-name: CD - DEPLOY
+name: CD - PUBLISH
 
 on:
   workflow_run:
@@ -7,51 +7,37 @@ on:
     branches: [ main, develop ]
 
 concurrency:
-  group: cd-deploy-${{ github.ref }}
-  cancel-in-progress: false
+  group: cd-publish-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
 
 env:
-  DOTNET_VERSION: 8.0.x
-  DOCKER_IMAGE: ${{vars.DOCKERHUB_USERNAME}}/auth-system
+  DOCKER_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/auth-system
 
 jobs:
-  check-ci:
-    name: Check CI status
-    runs-on: ubuntu-22.04
-    outputs:
-      should-deploy: ${{ steps.check.outputs.result }}
-      branch: ${{ steps.branch.outputs.name }}
-    steps:
-      - name: Check CI result
-        id: check
-        run: |
-          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then 
-            echo "result=false" >> $GITHUB_OUTPUT
-            echo "CI build failed. Skipping deployment."
-          else
-            echo "result=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Get branch name
-        id: branch
-        run: echo "name = ${{ github.event.workflow_run.head_branch }}" >> $GITHUB_OUTPUT
-  
   build-and-publish:
     name: Build and push Docker image
     runs-on: ubuntu-22.04
-    needs: check-ci
-    if: needs.check-ci.outputs.should-deploy == 'true'
-    outputs:
-      image-tag: ${{ steps.meta.outputs.tags }}
-      sha_tag: ${{ steps.sha_tag.outputs.tag }}
-    
+    if: github.event.workflow_run.conclusion == 'success'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
 
-      - name: Set up Docker buildx
+      - name: Prepare tags metadata
+        id: vars
+        run: |
+          BRANCH="${{ github.event.workflow_run.head_branch }}"
+          RUN="${{ github.run_number }}"
+          SHA="${{ github.event.workflow_run.head_sha }}"
+          SHORT_SHA="${SHA:0:7}"
+
+          # main-42-abc1234
+          echo "build_tag=${BRANCH}-${RUN}-${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Login to Docker Hub
@@ -66,10 +52,10 @@ jobs:
         with:
           images: ${{ env.DOCKER_IMAGE }}
           tags: |
-            type=sha,prefix=,format=short
-            type=ref,event=branch
-            type=raw,value=latest,enable=${{github.event.workflow_run.head_branch == 'main'  }}
-            type=raw,value=staging,enable=${{github.event.workflow_run.head_branch == 'develop'  }}
+            type=raw,value=${{ steps.vars.outputs.build_tag }}
+
+            type=raw,value=latest,enable=${{ steps.vars.outputs.branch == 'main' }}
+            type=raw,value=staging,enable=${{ steps.vars.outputs.branch == 'develop' }}
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -77,8 +63,7 @@ jobs:
           context: .
           file: ./Api/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags}}
-          labels: ${{ steps.meta.outputs.labels}}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
