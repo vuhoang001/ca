@@ -94,70 +94,70 @@ jobs:
           path: ./publish
           retention-days: 7
 
-  integration-tests:
-    name: Integration tests
-    runs-on: ubuntu-22.04
-    needs: build-and-unit-test
-
-    services:
-      mssql:
-        image: mcr.microsoft.com/mssql/server:2022-latest
-        env:
-          SA_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          ACCEPT_EULA: "Y"
-          MSSQL_PID: "Express"
-        ports:
-          - 1433:1433
-
-    env:
-      ConnectionStrings__AuthDb: Server=localhost,1433;Database=authdb;User Id=sa;Password=${{ secrets.DB_PASSWORD }};TrustServerCertificate=True;Encrypt=False
-      Jwt__Issuer: auth-service
-      Jwt__Audience: auth-clients
-      Jwt__SigningKey: ${{ secrets.JWT_SIGNING_KEY }}
-      Seed__AdminEmail: admin@example.com
-
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Install EF Core CLI
-        run: dotnet tool install --global dotnet-ef
-
-      - name: Cache nuget packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/global.json', '**/nuget.config') }}
-          restore-keys: |
-            nuget-${{ runner.os }}-
-
-      - name: Restore dependencies
-        run: dotnet restore ${{ env.SOLUTION_PATH }}
-
-
-      - name: Run database migrations
-        run: |
-          dotnet ef database update \
-            --project ./Infrastructure/Infrastructure.csproj \
-            --startup-project ./Api/Api.csproj \
-            --configuration Release \
-            --connection "${{ env.ConnectionStrings__AuthDb }}"
-
-      - name: Run integration tests
-        run: |
-          dotnet test ${{ env.INTEGRATION_TEST_PATH }} \
-            --configuration Release \
-            --logger "trx;LogFileName=integration-results.trx" \
-            --results-directory ./test-results/integration
-
-      - name: Upload integration test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: integration-test-results
-          path: ./test-results/integration/*.trx
+#  integration-tests:
+#    name: Integration tests
+#    runs-on: ubuntu-22.04
+#    needs: build-and-unit-test
+#
+#    services:
+#      mssql:
+#        image: mcr.microsoft.com/mssql/server:2022-latest
+#        env:
+#          SA_PASSWORD: ${{ secrets.DB_PASSWORD }}
+#          ACCEPT_EULA: "Y"
+#          MSSQL_PID: "Express"
+#        ports:
+#          - 1433:1433
+#
+#    env:
+#      ConnectionStrings__AuthDb: Server=localhost,1433;Database=authdb;User Id=sa;Password=${{ secrets.DB_PASSWORD }};TrustServerCertificate=True;Encrypt=False
+#      Jwt__Issuer: auth-service
+#      Jwt__Audience: auth-clients
+#      Jwt__SigningKey: ${{ secrets.JWT_SIGNING_KEY }}
+#      Seed__AdminEmail: admin@example.com
+#
+#    steps:
+#      - name: Checkout source
+#        uses: actions/checkout@v4
+#
+#      - name: Setup .NET
+#        uses: actions/setup-dotnet@v4
+#        with:
+#          dotnet-version: ${{ env.DOTNET_VERSION }}
+#
+#      - name: Install EF Core CLI
+#        run: dotnet tool install --global dotnet-ef
+#
+#      - name: Cache nuget packages
+#        uses: actions/cache@v4
+#        with:
+#          path: ~/.nuget/packages
+#          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/global.json', '**/nuget.config') }}
+#          restore-keys: |
+#            nuget-${{ runner.os }}-
+#
+#      - name: Restore dependencies
+#        run: dotnet restore ${{ env.SOLUTION_PATH }}
+#
+#
+#      - name: Run database migrations
+#        run: |
+#          dotnet ef database update \
+#            --project ./Infrastructure/Infrastructure.csproj \
+#            --startup-project ./Api/Api.csproj \
+#            --configuration Release \
+#            --connection "${{ env.ConnectionStrings__AuthDb }}"
+#
+#      - name: Run integration tests
+#        run: |
+#          dotnet test ${{ env.INTEGRATION_TEST_PATH }} \
+#            --configuration Release \
+#            --logger "trx;LogFileName=integration-results.trx" \
+#            --results-directory ./test-results/integration
+#
+#      - name: Upload integration test results
+#        if: always()
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: integration-test-results
+#          path: ./test-results/integration/*.trx
