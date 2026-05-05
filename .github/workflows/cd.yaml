@@ -12,7 +12,7 @@ concurrency:
 
 env:
   DOTNET_VERSION: 8.0.x
-  DOCKER_IMAGE: ${{secrets.DOCKERHUB_USERNAME}}/auth-system
+  DOCKER_IMAGE: ${{vars.DOCKERHUB_USERNAME}}/auth-system
 
 jobs:
   check-ci:
