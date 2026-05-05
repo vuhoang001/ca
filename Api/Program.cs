@@ -24,16 +24,16 @@ builder.Services.AddRateLimiter(options =>
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
     options.AddFixedWindowLimiter("auth", limiter =>
     {
-        limiter.PermitLimit = 10;
-        limiter.Window = TimeSpan.FromMinutes(1);
-        limiter.QueueLimit = 0;
+        limiter.PermitLimit       = 10;
+        limiter.Window            = TimeSpan.FromMinutes(1);
+        limiter.QueueLimit        = 0;
         limiter.AutoReplenishment = true;
     });
     options.AddFixedWindowLimiter("default", limiter =>
     {
-        limiter.PermitLimit = 60;
-        limiter.Window = TimeSpan.FromMinutes(1);
-        limiter.QueueLimit = 0;
+        limiter.PermitLimit       = 60;
+        limiter.Window            = TimeSpan.FromMinutes(1);
+        limiter.QueueLimit        = 0;
         limiter.AutoReplenishment = true;
     });
 });
