@@ -31,6 +31,7 @@ public class AuthEndpoints : IEndpointModule
             .AllowAnonymous()
             .RequireRateLimiting("auth");
 
+
         auth.MapPost("/change-password",
                      async (ChangePasswordCommand command, ISender sender, CancellationToken cancellationToken) =>
                      {

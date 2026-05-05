@@ -19,7 +19,7 @@ public sealed class DbSeeder(AppDbContext dbContext, IOptions<SeedOptions> seedO
         }
 
         var options = seedOptions.Value;
-        var tenant  = new Tenant(options.DefaultTenantName, options.DefaultTenantSlug);
+        var tenant = new Tenant(options.DefaultTenantName, options.DefaultTenantSlug);
         dbContext.Tenants.Add(tenant);
 
         var permissions = PermissionCodes.All
@@ -33,7 +33,7 @@ public sealed class DbSeeder(AppDbContext dbContext, IOptions<SeedOptions> seedO
 
         dbContext.Permissions.AddRange(permissions);
 
-        var adminRole   = new Role(tenant.Id, "Administrator", "System administrator", true);
+        var adminRole = new Role(tenant.Id, "Administrator", "System administrator", true);
         var appUserRole = new Role(tenant.Id, "User", "Default user role");
         dbContext.Roles.AddRange(adminRole, appUserRole);
 

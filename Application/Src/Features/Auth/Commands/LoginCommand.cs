@@ -64,7 +64,7 @@ public sealed class LoginCommandHandler(
                 throw new UnauthorizedException("Client application is not active.");
         }
 
-        var roles       = await userRepository.GetRoleNamesAsync(user.Id, cancellationToken);
+        var roles = await userRepository.GetRoleNamesAsync(user.Id, cancellationToken);
         var permissions = await userRepository.GetPermissionCodesAsync(user.Id, cancellationToken);
         var tokenResult = tokenService.GenerateTokens(user.Id, user.Email, user.UserName, user.TenantId, roles,
                                                       permissions, clientApp?.ClientId);
