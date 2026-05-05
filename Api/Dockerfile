@@ -3,7 +3,7 @@ WORKDIR /src
 
 COPY . .
 
-RUN dotnet restore AuthSystem.sln
+RUN dotnet restore MasterData.Template.sln
 
 WORKDIR /src/Api
 RUN dotnet publish -c Release -o /app/publish

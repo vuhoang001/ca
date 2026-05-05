@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DOTNET_VERSION: 8.0.x
+  DOTNET_VERSION: 10.0.x
   SOLUTION_PATH: ./MasterData.Template.sln
   UNIT_TEST_PATH: ./Tests/Domain.UnitTests/Domain.UnitTests.csproj
   APPLICATION_UNIT_TEST_PATH: ./Tests/Application.UnitTests/Application.UnitTests.csproj
