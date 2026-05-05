@@ -2,14 +2,15 @@ using Api.Endpoints;
 using Api.Extensions;
 using Api.Middleware;
 using Application;
-using Auth.Application;
 using Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
+using ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, configuration) => { configuration.ReadFrom.Configuration(context.Configuration); });
+builder.AddServiceDefaults();
 
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -46,6 +47,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapDefaultEndpoints();
 
 await app.Services.InitializeDatabaseAsync();
 

@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Api.Application;
+namespace Application.Abstractions;
 
 public interface IPasswordService
 {

@@ -1,4 +1,6 @@
-namespace Api.Application;
+using Api.Application;
+
+namespace Application.Abstractions;
 
 public interface ITokenService
 {

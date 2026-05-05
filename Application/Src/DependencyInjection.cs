@@ -4,7 +4,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Auth.Application;
+namespace Application;
 
 public static class DependencyInjection
 {

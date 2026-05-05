@@ -1,4 +1,5 @@
 using Api.Application;
+using Application.Abstractions;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 

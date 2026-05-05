@@ -1,4 +1,5 @@
 using Api.Application;
+using Application.Abstractions;
 using MediatR;
 
 namespace Application.Features.Permissions.Queries;

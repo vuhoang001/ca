@@ -1,9 +1,9 @@
 <Solution>
-  <Project Path="Auth.Api/Auth.Api.csproj" />
-  <Project Path="Auth.Application/Auth.Application.csproj" />
-  <Project Path="Auth.Infrastructure/Auth.Infrastructure.csproj" />
-  <Project Path="Auth.Domain/Auth.Domain.csproj" />
-  <Project Path="Auth.Shared/Auth.Shared.csproj" />
-  <Project Path="Auth.AppHost/Auth.AppHost.csproj" />
-  <Project Path="Auth.ServiceDefaults/Auth.ServiceDefaults.csproj" />
+  <Project Path="Api/Api.csproj" />
+  <Project Path="Application/Application.csproj" />
+  <Project Path="Infrastructure/Infrastructure.csproj" />
+  <Project Path="Domain/Domain.csproj" />
+  <Project Path="Shared/Shared.csproj" />
+  <Project Path="AppHost/AppHost.csproj" />
+  <Project Path="ServiceDefaults/ServiceDefaults.csproj" />
 </Solution>

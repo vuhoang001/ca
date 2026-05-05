@@ -1,7 +1,8 @@
 <Project Sdk="Aspire.AppHost.Sdk/13.2.2">
 
   <ItemGroup>
-    <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Api\Api.csproj" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -49,7 +49,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8080"
-      ConnectionStrings__DefaultConnection: >-
+      ConnectionStrings__AuthDb: >-
         Server=mssql,1433;Database=MyAppDb;User Id=sa;
         Password=Dev@Passw0rd!;TrustServerCertificate=True;
     volumes:

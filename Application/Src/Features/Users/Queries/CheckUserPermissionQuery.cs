@@ -1,4 +1,5 @@
 using Api.Application;
+using Application.Abstractions;
 using FluentValidation;
 using MediatR;
 using Shared;
