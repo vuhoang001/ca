@@ -14,10 +14,20 @@ public sealed class RefreshTokenRepository(AppDbContext dbContext) : IRefreshTok
     {
         IQueryable<RefreshToken> query = dbContext.RefreshTokens;
         if (includeUser)
-        {
             query = query.Include(x => x.User);
-        }
 
         return query.FirstOrDefaultAsync(x => x.TokenHash == tokenHash, cancellationToken);
+    }
+
+    public async Task RevokeAllActiveByUserIdAsync(Guid userId, string reason,
+        CancellationToken cancellationToken = default)
+    {
+        var now = DateTime.UtcNow;
+        var activeTokens = await dbContext.RefreshTokens
+            .Where(x => x.UserId == userId && x.RevokedAtUtc == null && x.ExpiresAtUtc > now)
+            .ToListAsync(cancellationToken);
+
+        foreach (var token in activeTokens)
+            token.Revoke(reason);
     }
 }

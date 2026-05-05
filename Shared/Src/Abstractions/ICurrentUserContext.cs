@@ -6,6 +6,8 @@ public interface ICurrentUserContext
     Guid? TenantId { get; }
     string? Email { get; }
     string? ClientId { get; }
+    string? JwtId { get; }
+    DateTime? AccessTokenExpiresAt { get; }
     string? IpAddress { get; }
     string? UserAgent { get; }
     string? CorrelationId { get; }

@@ -8,4 +8,6 @@ public interface IRefreshTokenRepository
 
     Task<RefreshToken?> GetByTokenHashAsync(string tokenHash, bool includeUser = false,
         CancellationToken cancellationToken = default);
+
+    Task RevokeAllActiveByUserIdAsync(Guid userId, string reason, CancellationToken cancellationToken = default);
 }

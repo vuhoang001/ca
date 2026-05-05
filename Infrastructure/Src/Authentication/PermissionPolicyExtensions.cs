@@ -1,4 +1,3 @@
-using Api.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Infrastructure.Authentication;

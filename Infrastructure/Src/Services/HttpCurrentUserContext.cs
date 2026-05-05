@@ -13,6 +13,17 @@ public sealed class HttpCurrentUserContext(IHttpContextAccessor httpContextAcces
     public Guid? TenantId => TryGetGuid("tenant_id");
     public string? Email => User?.FindFirstValue(ClaimTypes.Email) ?? User?.FindFirstValue("email");
     public string? ClientId => User?.FindFirstValue("client_id");
+    public string? JwtId => User?.FindFirstValue("jti");
+    public DateTime? AccessTokenExpiresAt
+    {
+        get
+        {
+            var exp = User?.FindFirstValue("exp");
+            return long.TryParse(exp, out var seconds)
+                ? DateTimeOffset.FromUnixTimeSeconds(seconds).UtcDateTime
+                : null;
+        }
+    }
     public string? IpAddress => HttpContext?.Connection.RemoteIpAddress?.ToString();
     public string? UserAgent => HttpContext?.Request.Headers.UserAgent.ToString();
     public string? CorrelationId => HttpContext?.TraceIdentifier;

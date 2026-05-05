@@ -23,6 +23,8 @@ public sealed class ChangePasswordCommandValidator : AbstractValidator<ChangePas
 public sealed class ChangePasswordCommandHandler(
     IUserRepository userRepository,
     IPasswordService passwordService,
+    IRefreshTokenRepository refreshTokenRepository,
+    IRevokedAccessTokenRepository revokedAccessTokenRepository,
     IAuditService auditService,
     ICurrentUserContext currentUserContext,
     IUnitOfWork unitOfWork)
@@ -35,11 +37,19 @@ public sealed class ChangePasswordCommandHandler(
             ?? throw new NotFoundException("User not found.");
 
         if (!passwordService.VerifyPassword(user, user.PasswordHash, request.CurrentPassword))
-        {
             throw new UnauthorizedException("Current password is invalid.");
-        }
 
         user.SetPassword(passwordService.HashPassword(user, request.NewPassword));
+
+        await refreshTokenRepository.RevokeAllActiveByUserIdAsync(userId, "Password changed", cancellationToken);
+
+        if (currentUserContext.JwtId is not null && currentUserContext.AccessTokenExpiresAt is not null &&
+            !await revokedAccessTokenRepository.ExistsActiveAsync(currentUserContext.JwtId, cancellationToken))
+        {
+            revokedAccessTokenRepository.Add(new RevokedAccessToken(
+                currentUserContext.JwtId, userId, currentUserContext.AccessTokenExpiresAt.Value, "Password changed"));
+        }
+
         await unitOfWork.SaveChangesAsync(cancellationToken);
         await auditService.WriteAsync("auth.password.changed", nameof(User), user.Id.ToString(),
                                       null, "Success", cancellationToken);

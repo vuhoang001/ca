@@ -60,7 +60,11 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
         builder.Property(x => x.Action).HasMaxLength(100).IsRequired();
         builder.Property(x => x.Description).HasMaxLength(500);
         builder.Property(x => x.ConditionsJson).HasMaxLength(2000);
-        builder.HasIndex(x => x.Code).IsUnique();
+        // unique per (tenant, code) for tenant permissions
+        builder.HasIndex(x => new { x.TenantId, x.Code }).IsUnique();
+        // unique code among system permissions (TenantId IS NULL)
+        builder.HasIndex(x => x.Code).IsUnique().HasFilter("[TenantId] IS NULL");
+        builder.HasOne(x => x.Tenant).WithMany().HasForeignKey(x => x.TenantId).OnDelete(DeleteBehavior.Restrict);
     }
 }
 

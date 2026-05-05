@@ -27,6 +27,7 @@ public sealed record RoleResponse(
 
 public sealed record PermissionResponse(
     Guid Id,
+    Guid? TenantId,
     string Code,
     string Name,
     string Resource,

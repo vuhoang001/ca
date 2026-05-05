@@ -10,6 +10,7 @@ using Shared.Exceptions;
 namespace Application.Features.Permissions.Commands;
 
 public sealed record CreatePermissionCommand(
+    Guid? TenantId,
     string Code,
     string Name,
     string Resource,
@@ -37,19 +38,21 @@ public sealed class CreatePermissionCommandHandler(
 {
     public async Task<PermissionResponse> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
     {
-        if (await permissionRepository.ExistsByCodeAsync(request.Code.Trim().ToLowerInvariant(), cancellationToken))
+        if (await permissionRepository.ExistsByCodeAsync(request.Code.Trim().ToLowerInvariant(), request.TenantId,
+                                                         cancellationToken))
         {
             throw new ConflictException($"Permission '{request.Code}' already exists.");
         }
 
-        var permission = new Permission(request.Code, request.Name, request.Resource, request.Action,
+        var permission = new Permission(request.TenantId, request.Code, request.Name, request.Resource, request.Action,
                                         request.Description);
         permissionRepository.Add(permission);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         await auditService.WriteAsync("permission.created", nameof(Permission), permission.Id.ToString(),
                                       new { permission.Code }, "Success", cancellationToken);
 
-        return new PermissionResponse(permission.Id, permission.Code, permission.Name, permission.Resource,
-                                      permission.Action, permission.Description, permission.IsActive);
+        return new PermissionResponse(permission.Id, permission.TenantId, permission.Code, permission.Name,
+                                      permission.Resource, permission.Action, permission.Description,
+                                      permission.IsActive);
     }
 }

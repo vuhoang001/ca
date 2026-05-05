@@ -1,6 +1,7 @@
 using Api.Application;
 using Application.Abstractions;
 using Domain.Entities;
+using Domain.Enums;
 using FluentValidation;
 using MediatR;
 using Shared;
@@ -49,6 +50,9 @@ public sealed class RefreshTokenCommandHandler(
         }
 
         var user = currentRefreshToken.User;
+        if (user.Status != UserStatus.Active)
+            throw new UnauthorizedException("Account is not active.");
+
         var roles = await userRepository.GetRoleNamesAsync(user.Id, cancellationToken);
         var permissions = await userRepository.GetPermissionCodesAsync(user.Id, cancellationToken);
         var tokenResult = tokenService.GenerateTokens(user.Id, user.Email, user.UserName, user.TenantId, roles,

@@ -40,6 +40,15 @@ public class AuthEndpoints : IEndpointModule
             .RequireAuthorization()
             .RequireRateLimiting("default");
 
+        auth.MapPost("/logout",
+                     async (LogoutCommand command, ISender sender, CancellationToken cancellationToken) =>
+                     {
+                         await sender.Send(command, cancellationToken);
+                         return Results.NoContent();
+                     })
+            .RequireAuthorization()
+            .RequireRateLimiting("default");
+
         auth.MapPost("/revoke",
                      async (RevokeTokenCommand command, ISender sender, CancellationToken cancellationToken) =>
                      {

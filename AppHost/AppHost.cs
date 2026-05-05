@@ -1,6 +1,9 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var sqlServer = builder.AddSqlServer("sqlserver");
+var sqlPassword = builder.AddParameter("sql-password", "YourStrong@Password123", secret: true);
+
+var sqlServer = builder.AddSqlServer("sqlserver", password: sqlPassword)
+    .WithHostPort(14388);
 var authDb = sqlServer.AddDatabase("AuthDb");
 
 builder.AddProject<Projects.Api>("api")

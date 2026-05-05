@@ -1,6 +1,7 @@
 using Api.Application;
 using Application.Abstractions;
 using Domain.Entities;
+using Domain.Enums;
 using FluentValidation;
 using MediatR;
 using Shared;
@@ -46,14 +47,24 @@ public sealed class LoginCommandHandler(
             throw new UnauthorizedException("Invalid credentials.");
         }
 
+        if (user.Status != UserStatus.Active)
+        {
+            await auditService.WriteAsync("auth.login", nameof(User), user.Id.ToString(), new { user.Status },
+                                          "Failed", cancellationToken);
+            throw new UnauthorizedException("Account is not active.");
+        }
+
         ClientApp? clientApp = null;
         if (!string.IsNullOrWhiteSpace(request.ClientId))
         {
             clientApp = await clientAppRepository.GetByClientIdAsync(request.ClientId!, cancellationToken)
                 ?? throw new UnauthorizedException("Unknown client application.");
+
+            if (!clientApp.IsActive)
+                throw new UnauthorizedException("Client application is not active.");
         }
 
-        var roles = await userRepository.GetRoleNamesAsync(user.Id, cancellationToken);
+        var roles       = await userRepository.GetRoleNamesAsync(user.Id, cancellationToken);
         var permissions = await userRepository.GetPermissionCodesAsync(user.Id, cancellationToken);
         var tokenResult = tokenService.GenerateTokens(user.Id, user.Email, user.UserName, user.TenantId, roles,
                                                       permissions, clientApp?.ClientId);

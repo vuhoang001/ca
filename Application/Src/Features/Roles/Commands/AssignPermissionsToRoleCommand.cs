@@ -39,6 +39,13 @@ public sealed class AssignPermissionsToRoleCommandHandler(
             throw new NotFoundException("One or more permissions were not found.");
         }
 
+        var crossTenant = permissions.Any(p =>
+            p.TenantId != null && p.TenantId != role.TenantId);
+        if (crossTenant)
+        {
+            throw new BadRequestException("Cannot assign permissions from a different tenant to this role.");
+        }
+
         await roleRepository.AssignPermissionsAsync(role, permissions, currentUserContext.Email, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         await auditService.WriteAsync("role.permissions.assigned", nameof(Role), role.Id.ToString(),

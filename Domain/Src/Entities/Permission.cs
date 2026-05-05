@@ -6,6 +6,8 @@ public sealed class Permission : AuditableEntity
 {
     private readonly List<RolePermission> _rolePermissions = [];
 
+    public Guid? TenantId { get; private set; }
+    public Tenant? Tenant { get; private set; }
     public string Code { get; private set; } = null!;
     public string Name { get; private set; } = null!;
     public string Resource { get; private set; } = null!;
@@ -20,8 +22,9 @@ public sealed class Permission : AuditableEntity
     {
     }
 
-    public Permission(string code, string name, string resource, string action, string? description)
+    public Permission(Guid? tenantId, string code, string name, string resource, string action, string? description)
     {
+        TenantId = tenantId;
         Code = code.Trim().ToLowerInvariant();
         Name = name.Trim();
         Resource = resource.Trim().ToLowerInvariant();

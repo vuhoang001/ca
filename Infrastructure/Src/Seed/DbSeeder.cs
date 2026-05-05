@@ -1,4 +1,3 @@
-using Api.Application;
 using Application.Common;
 using Domain.Entities;
 using Domain.Enums;
@@ -8,7 +7,7 @@ using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Api.Infrastructure;
+namespace Infrastructure.Seed;
 
 public sealed class DbSeeder(AppDbContext dbContext, IOptions<SeedOptions> seedOptions)
 {
@@ -20,21 +19,21 @@ public sealed class DbSeeder(AppDbContext dbContext, IOptions<SeedOptions> seedO
         }
 
         var options = seedOptions.Value;
-        var tenant = new Tenant(options.DefaultTenantName, options.DefaultTenantSlug);
+        var tenant  = new Tenant(options.DefaultTenantName, options.DefaultTenantSlug);
         dbContext.Tenants.Add(tenant);
 
         var permissions = PermissionCodes.All
             .Select(code =>
             {
                 var parts = code.Split('.');
-                return new Permission(code, code, parts.Length > 1 ? parts[1] : "auth", parts[^1],
+                return new Permission(null, code, code, parts.Length > 1 ? parts[1] : "auth", parts[^1],
                                       $"Seeded permission {code}");
             })
             .ToList();
 
         dbContext.Permissions.AddRange(permissions);
 
-        var adminRole = new Role(tenant.Id, "Administrator", "System administrator", true);
+        var adminRole   = new Role(tenant.Id, "Administrator", "System administrator", true);
         var appUserRole = new Role(tenant.Id, "User", "Default user role");
         dbContext.Roles.AddRange(adminRole, appUserRole);
 

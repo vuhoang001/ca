@@ -46,7 +46,8 @@ public sealed class UpdatePermissionCommandHandler(
         await auditService.WriteAsync("permission.updated", nameof(Permission), permission.Id.ToString(),
                                       new { permission.Code }, "Success", cancellationToken);
 
-        return new PermissionResponse(permission.Id, permission.Code, permission.Name, permission.Resource,
-                                      permission.Action, permission.Description, permission.IsActive);
+        return new PermissionResponse(permission.Id, permission.TenantId, permission.Code, permission.Name,
+                                      permission.Resource, permission.Action, permission.Description,
+                                      permission.IsActive);
     }
 }

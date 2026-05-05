@@ -17,9 +17,9 @@ public sealed class PermissionRepository(AppDbContext dbContext) : IPermissionRe
         return dbContext.Permissions.FirstOrDefaultAsync(x => x.Id == permissionId, cancellationToken);
     }
 
-    public Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default)
+    public Task<bool> ExistsByCodeAsync(string code, Guid? tenantId, CancellationToken cancellationToken = default)
     {
-        return dbContext.Permissions.AnyAsync(x => x.Code == code, cancellationToken);
+        return dbContext.Permissions.AnyAsync(x => x.Code == code && x.TenantId == tenantId, cancellationToken);
     }
 
     public Task<List<Permission>> GetByIdsAsync(IReadOnlyCollection<Guid> permissionIds,
@@ -28,8 +28,11 @@ public sealed class PermissionRepository(AppDbContext dbContext) : IPermissionRe
         return dbContext.Permissions.Where(x => permissionIds.Contains(x.Id)).ToListAsync(cancellationToken);
     }
 
-    public Task<List<Permission>> ListAsync(CancellationToken cancellationToken = default)
+    public Task<List<Permission>> ListAsync(Guid? tenantId, CancellationToken cancellationToken = default)
     {
-        return dbContext.Permissions.OrderBy(x => x.Code).ToListAsync(cancellationToken);
+        return dbContext.Permissions
+            .Where(x => x.TenantId == tenantId)
+            .OrderBy(x => x.Code)
+            .ToListAsync(cancellationToken);
     }
 }
